@@ -1,0 +1,32 @@
+version: '3'
+
+tasks:
+  json:
+    cmds:
+      - python Resume_json.py
+  html:
+    deps:
+      - python Resume_json.py
+    cmds:
+      - python HTML.py
+  build:
+    cmds:
+      - docker build -t resume-builder -f Dockerfile .
+    silent: 
+  container:
+    cmds:
+      - docker run -p 8080:80 resume-builder
+  compose-build:
+    cmds:
+      - docker-compose build
+
+  compose-up:
+    cmds:
+      - docker-compose up -d
+
+  compose-down:
+    cmds:
+      - docker-compose down
+
+      
+      

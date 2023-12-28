@@ -1,0 +1,65 @@
+basics:
+  name: Kozlov Sergey
+  label: Programmer
+  image: ''
+  email: serzh.kozlov.4@gmail.com
+  phone: +7-961-860-09-34
+  summary: 'Hi, my name is Sergey and I love programming'
+  location:
+    address: 8 Fedor Lytkin Street
+    postalCode: '634045'
+    city: Tomsk
+    countryCode: RU
+    region: Tomsk Oblast
+  profiles:
+    - network: Telegram
+      username: Sergey
+      url: 'https://t.me/My_Name214'
+    - network: VK
+      username: Kozlov Sergey
+      url: 'https://vk.com/chel_mira2'
+work:
+  - name: Will be Later
+    position: Will be Later
+    summary: None
+volunteer:
+  - organization: None
+    postition: None
+    summary: None
+education:
+  - institution: Tomsk State University of Control Systems and Radioelectronics
+    url: 'https://tusur.ru/en'
+    area: Informatics and Computer Engineering
+    studyType: Bachelor
+    startDate: '2022-09-01'
+    endDate: '2026-09-01'
+awards:
+  - title: None
+    awarder: None
+    summary: None
+certificates:
+  - name: None
+    issuer: None
+publications:
+  - name: None
+    publisher: None
+    summary: None
+skills:
+  - name: .Net Development
+    level: Junior
+    languages: null
+  - language: English
+    fluency: A2
+  - langeage: Russian
+    fluency: Native speaker
+interests:
+  - name: Volleyball
+references:
+  - name: Kozlov Sergey
+    reference: None
+projects:
+  - name: OrdersApp
+    startDate: '2023-09-01'
+    endDate: '2023-12-01'
+    description: 'Applications for working with orders, buyers and delivery'
+    url: 'https://github.com/sergey69934/Programming.git'
