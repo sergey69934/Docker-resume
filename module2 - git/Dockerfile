@@ -1,47 +1,52 @@
-# Используем базовый образ с поддержкой Python
-FROM python:3.8 as builder
+# Этап 1: Сборка JSON из YAML
+FROM python:3.8.18-alpine3.18 as tojson
 
-# Задаем рабочую директорию
-WORKDIR /
+ARG TASK_BINARY=task_linux_amd64.tar.gz
 
-# Устанавливаем необходимые утилиты для сборки
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+# Установка Tasks
+COPY ${TASK_BINARY} /tmp/
+RUN tar -xzf /tmp/${TASK_BINARY} -C /usr/local/bin/ \
+    && rm /tmp/${TASK_BINARY}
 
-# Копируем файлы в рабочую директорию
-COPY Resume.yml /
-COPY Resume_json.py /
-COPY HTML.py /
+RUN apk update && apk add --no-cache \
+    build-base \
+    && rm -rf /var/cache/apk/*
 
-# Устанавливаем зависимости
-RUN pip install pyyaml json2html
+WORKDIR /app
 
-RUN python Resume_json.py
-RUN python HTML.py
+COPY Resume.yml .
+COPY Resume_json.py .
+COPY Taskfile.yml .
 
-# Определение основной команды
-CMD ["sh", "-c", "python Resume_json.py && python HTML.py"]
+RUN pip install pyyaml
+
+#TODO: ?
+RUN task json
+ENTRYPOINT ["task"]
+CMD ["json"]
 
 
-# Используем базовый образ с поддержкой Python
-FROM python:3.8 as result
+FROM node:alpine as html
 
-# Задаем рабочую директорию
-WORKDIR /
+WORKDIR /app
 
-# Копируем файлы в рабочую директорию
-COPY --from=builder /Resume.html /
+# Копируем .npmrc внутрь контейнера
+COPY .npmrc ./
 
-# Образ 2: Использует результаты сборки Образа 1
-FROM nginx:1.23.2-alpine as Out
+COPY --from=tojson /app/resume.json .
+COPY --from=tojson /app/Taskfile.yml .
 
-# Копируем конфиг Nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN npm set progress=false
+RUN npm install -g resume-cli
+RUN npm install -g @go-task/cli
 
-# Копируем файл Resume.html из Образа 1 в директорию, где Nginx ожидает файлы
-COPY --from=result /Resume.html /usr/share/nginx/html/
-COPY styles.css /usr/share/nginx/html/
+# ДЛЯ ИЗМЕНЕНИЯ ТЕМЫ МОЖНО ПРОПИСАТЬ: npm install <theme> и --theme <theme>
+RUN task html
 
-# Определение основной команды
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["task"]
+CMD ["html"]
+
+FROM busybox as release
+
+WORKDIR /app/result
+COPY --from=html /app/resume.html .

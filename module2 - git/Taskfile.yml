@@ -5,28 +5,32 @@ tasks:
     cmds:
       - python Resume_json.py
   html:
-    deps:
-      - python Resume_json.py
     cmds:
-      - python HTML.py
-  build:
-    cmds:
-      - docker build -t resume-builder -f Dockerfile .
-    silent: 
-  container:
-    cmds:
-      - docker run -p 8080:80 resume-builder
+      - npm install jsonresume-theme-stackoverflow
+      - resume export --format html --theme jsonresume-theme-stackoverflow resume.html
+
   compose-build:
     cmds:
       - docker-compose build
 
   compose-up:
+    deps:
+      - compose-build
     cmds:
       - docker-compose up -d
 
   compose-down:
     cmds:
       - docker-compose down
+  
+  docker-build:
+    cmds:
+      - docker build -t resume .
 
-      
-      
+  docker-run:
+    cmds:
+      - docker run -p 8080:80 --rm --name "resume-export" -d resume
+  
+  docker-stop:
+    cmds:
+      - docker stop resume-export

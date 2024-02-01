@@ -10,7 +10,7 @@ def parseYAML():
         return yaml.safe_load(file)
     
 def convertToJSON():
-    with open("Resume"+".json", "w", encoding="utf-8") as jsonOut:
+    with open("resume"+".json", "w", encoding="utf-8") as jsonOut:
         json.dump(parseYAML(), jsonOut, indent=4, ensure_ascii=False)
 
 convertToJSON()
