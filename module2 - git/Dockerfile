@@ -1,5 +1,5 @@
 # Этап 1: Сборка JSON из YAML
-FROM python:3.8.18-alpine3.18 as tojson
+FROM python:3.8.18-alpine3.18 as builder
 
 ARG TASK_BINARY=task_linux_amd64.tar.gz
 
@@ -10,7 +10,13 @@ RUN tar -xzf /tmp/${TASK_BINARY} -C /usr/local/bin/ \
 
 RUN apk update && apk add --no-cache \
     build-base \
+    npm \
     && rm -rf /var/cache/apk/*
+
+RUN npm set progress=false
+RUN pip install pyyaml
+
+RUN npm install -g resume-cli
 
 WORKDIR /app
 
@@ -18,35 +24,13 @@ COPY Resume.yml .
 COPY Resume_json.py .
 COPY Taskfile.yml .
 
-RUN pip install pyyaml
-
-#TODO: ?
-RUN task json
-ENTRYPOINT ["task"]
-CMD ["json"]
-
-
-FROM node:alpine as html
-
+FROM builder as build
 WORKDIR /app
-
-# Копируем .npmrc внутрь контейнера
-COPY .npmrc ./
-
-COPY --from=tojson /app/resume.json .
-COPY --from=tojson /app/Taskfile.yml .
-
-RUN npm set progress=false
-RUN npm install -g resume-cli
-RUN npm install -g @go-task/cli
-
-# ДЛЯ ИЗМЕНЕНИЯ ТЕМЫ МОЖНО ПРОПИСАТЬ: npm install <theme> и --theme <theme>
 RUN task html
-
 ENTRYPOINT ["task"]
 CMD ["html"]
 
 FROM busybox as release
 
 WORKDIR /app/result
-COPY --from=html /app/resume.html .
+COPY --from=build /app/resume.html .

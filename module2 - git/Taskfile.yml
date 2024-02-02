@@ -5,6 +5,8 @@ tasks:
     cmds:
       - python Resume_json.py
   html:
+    deps:
+      - json
     cmds:
       - npm install jsonresume-theme-stackoverflow
       - resume export --format html --theme jsonresume-theme-stackoverflow resume.html
