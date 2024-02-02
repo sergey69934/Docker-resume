@@ -20,7 +20,7 @@ tasks:
       - docker-compose up -d
   compose-down:
     cmds:
-      - docker-compose down
+      - docker-compose down -v
   docker-builder:
     cmds:
       - docker build -t resume-builder --target builder .    
@@ -33,7 +33,7 @@ tasks:
       - task: docker-release
   docker-run:
     cmds:
-      - docker run --rm --name "resume-export" -d resume
+      - docker run --rm -ti --name "resume-export" -d resume-release
   docker-stop:
     cmds:
       - docker stop resume-export
