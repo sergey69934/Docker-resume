@@ -20,15 +20,21 @@ RUN npm install -g resume-cli
 
 WORKDIR /app
 
-COPY Resume.yml .
 COPY Resume_json.py .
 COPY Taskfile.yml .
+COPY Resume.yml .
+
 
 FROM builder as build
+
 WORKDIR /app
+
 RUN task html
+
 ENTRYPOINT ["task"]
 CMD ["html"]
+
+
 
 FROM busybox as release
 

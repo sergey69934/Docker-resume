@@ -23,10 +23,10 @@ tasks:
       - docker-compose down
   docker-builder:
     cmds:
-      - docker build -t resume --target builder .    
+      - docker build -t resume-builder --target builder .    
   docker-release:
     cmds:
-      - docker build -t resume . 
+      - docker build -t resume-release . 
   docker-build:
     cmds:
       - task: docker-builder
