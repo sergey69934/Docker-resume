@@ -10,29 +10,30 @@ tasks:
     cmds:
       - npm install jsonresume-theme-stackoverflow
       - resume export --format html --theme jsonresume-theme-stackoverflow resume.html
-
   compose-build:
     cmds:
       - docker-compose build
-
   compose-up:
     deps:
       - compose-build
     cmds:
       - docker-compose up -d
-
   compose-down:
     cmds:
       - docker-compose down
-  
+  docker-builder:
+    cmds:
+      - docker build -t resume --target builder .    
+  docker-release:
+    cmds:
+      - docker build -t resume . 
   docker-build:
     cmds:
-      - docker build -t resume .
-
+      - task: docker-builder
+      - task: docker-release
   docker-run:
     cmds:
-      - docker run -p 8080:80 --rm --name "resume-export" -d resume
-  
+      - docker run --rm --name "resume-export" -d resume
   docker-stop:
     cmds:
       - docker stop resume-export
