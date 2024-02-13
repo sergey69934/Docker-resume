@@ -1,5 +1,7 @@
 version: '3'
-
+env:
+  THEME: '{{ .THEME | default "jsonresume-theme-stackoverflow" }}'
+  PROJECT: '{{ .PROJECT | default "resume" }}'
 tasks:
   json:
     cmds:
@@ -8,32 +10,29 @@ tasks:
     deps:
       - json
     cmds:
-      - npm install jsonresume-theme-stackoverflow
-      - resume export --format html --theme jsonresume-theme-stackoverflow resume.html
-  compose-build:
-    cmds:
-      - docker-compose build
+      - npm install {{ .THEME }}
+      - resume export --format html --theme {{ .THEME }} resume.html
   compose-up:
-    deps:
-      - compose-build
     cmds:
-      - docker-compose up -d
+      - docker-compose -p {{ .PROJECT }} up -d
   compose-down:
     cmds:
-      - docker-compose down -v
+      - docker-compose -p {{ .PROJECT }} down -v
   docker-builder:
     cmds:
-      - docker build -t resume-builder --target builder .    
+      - docker build -t {{ .PROJECT }}-builder --target builder .    
   docker-release:
+    deps:
+      - docker-builder
     cmds:
-      - docker build -t resume-release . 
+      - docker build -t {{ .PROJECT }}-release . 
   docker-build:
     cmds:
       - task: docker-builder
       - task: docker-release
   docker-run:
     cmds:
-      - docker run --rm -ti --name "resume-export" -d resume-release
+      - docker run --rm -ti --name "{{ .PROJECT }}-export" -d {{ .PROJECT }}-release
   docker-stop:
     cmds:
-      - docker stop resume-export
+      - docker stop {{ .PROJECT }}-export
