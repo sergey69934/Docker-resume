@@ -30,7 +30,7 @@ jobs:
         with:
           context: ./module2 - git
           file: ./module2 - git/Dockerfile
-          push: true
+          push: false
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/resume-builder:${{ env.TAG }}
           target: builder
           
@@ -39,5 +39,5 @@ jobs:
         with:
           context: ./module2 - git
           file: ./module2 - git/Dockerfile
-          push: true
+          push: false
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/resume-release:${{ env.TAG }}
