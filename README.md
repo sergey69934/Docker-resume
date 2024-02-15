@@ -68,6 +68,9 @@ task compose-down
 1. Создал Workflow 'CI'
 2. Написал job 'build-builder'. В Dockerfile есть multi-stage build (многоэтапная сборка). В Action происходит сборка сборка стадии builder, а затем все остальные.
 3. Добавил публикацию на Dockerhub (я её отключил 'push: false')
+4. ![image](https://github.com/sergey69934/Docker-resume/assets/124598976/d68e5c57-a951-4827-9438-41f69a5cba69)
+5. ![image](https://github.com/sergey69934/Docker-resume/assets/124598976/b4d71cdf-16ad-4442-94a1-51fefb940cc8)
+6. ![image](https://github.com/sergey69934/Docker-resume/assets/124598976/25d2600a-8eab-468e-b0a0-a070ee2c0a3d)
 
 ## Дата последнего изменения
 15-02-2024
