@@ -5,7 +5,7 @@
 # Yaml resume pdf
 <p><font color="green">Этот репозиторий содержит yaml резюме, конвертирует его в json и создаёт html файл резюме. Затем nginx.</font></p>
 
-## Настройка
+## Настройка для локального использования (Можно использовать Tasks)
 1. `npm install -g resume-cli`
 2. `npm install jsonresume-theme-stackoverflow`
 3. `resume export resume.pdf --theme=stackoverflow`
@@ -64,7 +64,11 @@ task compose-up
 ```shell
 task compose-down
 ```
+## Выполнение задания GitHub Actions
+1. Создал Workflow 'CI'
+2. Написал job 'build-builder'. В Dockerfile есть multi-stage build (многоэтапная сборка). В Action происходит сборка сборка стадии builder, а затем все остальные.
+3. Добавил публикацию на Dockerhub (я её отключил 'push: false')
 
 ## Дата последнего изменения
-21-01-2024
+15-02-2024
 
